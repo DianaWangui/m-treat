@@ -1,5 +1,4 @@
-# M-TREAT Full-Stack Developer Takeaway Assessment
-
+# M-TREAT Full-Stack Developer MVP
 This project, **M-TREAT**, is a patient registration and authentication system built with **React**, **Redux**, **Django**, and **PostgreSQL**. The goal is to demonstrate a full-stack solution where data flows seamlessly between the frontend and backend. This README will guide you through the setup process, dependencies, and how to get the project up and running.
 
 ---
