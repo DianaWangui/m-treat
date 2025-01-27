@@ -21,4 +21,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     user_data = PatientRegistarationSerializer(self.user).data
     data['user'] = user_data
     return data 
+
+class PatientUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ['phone', 'address']
+    
+    def update(self, instance, validated_data):
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.address = validated_data.get('address', instance.address)
+        instance.save()
+        return instance
     
