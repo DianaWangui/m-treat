@@ -1,6 +1,12 @@
+/**
+ * This component handles patient registration by collecting user details 
+ * and submitting them to the backend. It also displays validation messages 
+ * and provides a redirect link to the login page for existing users.
+ */
+
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const PatientRegistration = () => {
   const [patientData, setPatientData] = useState({
@@ -27,21 +33,30 @@ const PatientRegistration = () => {
       return;
     }
 
+    //API CALL FOR SIGNING USER IN
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/v1/accounts/register/', patientData);
       console.log(response.data);
 
       setSuccessMessage('Registration successful! Redirecting...');
       setError('');
-      console.log("reg")
-
+      
       setTimeout(() => {
         navigate('/login');
       }, 1000);
 
     } catch (err) {
-      setError('Registration failed. Please try again.');
       setSuccessMessage('');
+      
+      if (err.response?.data?.username) {
+        setError('Username already exists');
+      } else if (err.response?.data?.email) {
+        setError('Email already exists');
+      } else if (err.response?.data?.phone) {
+        setError('Phone number already exists');
+      } else {
+        setError('Registration failed. Please try again.');
+      }
       console.error(err.response?.data);
     }
   };
@@ -56,9 +71,9 @@ const PatientRegistration = () => {
             {successMessage}
           </p>
         )}
-        
+
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700">Username</label>
@@ -117,6 +132,13 @@ const PatientRegistration = () => {
             Register
           </button>
         </form>
+
+        <p className="mt-4 text-center text-gray-700">
+          Already have an account?{' '}
+          <Link to="/login" className="text-orange-600 hover:underline">
+            Login here
+          </Link>
+        </p>
       </div>
     </div>
   );
